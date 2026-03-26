@@ -1,0 +1,61 @@
+# ── Environment & secrets ──────────────────────────
+.env
+.env.*
+.env.local
+!.env.example
+!.env.local.example
+backend/.env
+frontend/.env.local
+
+# ── Python ─────────────────────────────────────────
+backend/venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# ── Node / Frontend ───────────────────────────────
+node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# ── TESS data & caches ────────────────────────────
+# FITS files, model weights, database, MAST cache
+*.fits
+*.fits.gz
+*.pt
+*.stats.npz
+backend/data/
+tess-data/
+
+# ── IDE / OS ──────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── Logs & debug ──────────────────────────────────
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ── Build artifacts ───────────────────────────────
+*.pem
+*.tsbuildinfo
+next-env.d.ts
+/coverage
+
+# ── Misc ──────────────────────────────────────────
+.vercel
