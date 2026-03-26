@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #181818;
+  --foreground: #fafafa;
+  --card: #252525;
+  --popover: #1a1a1a;
+  --primary: #fafafa;
+  --primary-foreground: #181818;
+  --secondary: #252525;
+  --secondary-foreground: #fafafa;
+  --muted: #252525;
+  --muted-foreground: #737373;
+  --accent: #2e2e2e;
+  --accent-foreground: #fafafa;
+  --destructive: #ef4444;
+  --border: #2e2e2e;
+  --input: #2e2e2e;
+  --ring: #525252;
+  --surface: #252525;
+  --dim: #b4b4b4;
+  --radius: 0.75rem;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #3a3a3a;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #525252;
+  }
+}
+
+@layer components {
+  .card-surface {
+    @apply bg-[var(--card)] border border-[var(--border)] rounded-xl;
+  }
+
+  .label-upper {
+    @apply text-[10px] uppercase tracking-wider text-[var(--muted-foreground)];
+  }
+
+  .input-field {
+    @apply bg-[var(--card)] border border-[var(--border)] rounded-xl px-3 py-2 text-sm
+    text-[var(--foreground)] placeholder:text-[var(--muted-foreground)]
+    focus:outline-none focus:ring-1 focus:ring-[var(--ring)]
+    transition-colors;
+  }
+
+  .btn-primary {
+    @apply bg-[var(--foreground)] text-[var(--background)] rounded-xl px-4 py-2 text-sm font-medium
+    hover:bg-[var(--dim)] transition-colors;
+  }
+
+  .btn-secondary {
+    @apply border border-[var(--border)] rounded-xl px-4 py-2 text-sm
+    text-[var(--dim)] hover:text-[var(--foreground)] hover:bg-white/5
+    transition-colors;
+  }
+
+  .btn-destructive {
+    @apply bg-red-500/10 text-red-400 border border-red-500/20 rounded-xl px-4 py-2 text-sm
+    hover:bg-red-500/20 transition-colors;
+  }
+
+  .btn-ghost {
+    @apply rounded-xl px-3 py-2 text-sm text-[var(--dim)]
+    hover:text-[var(--foreground)] hover:bg-white/5 transition-colors;
+  }
+}
