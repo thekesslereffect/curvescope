@@ -315,3 +315,9 @@ export async function getTrainStatus(): Promise<TrainStatus> {
   const { data } = await client.get("/train/status")
   return data as TrainStatus
 }
+
+export function getExportUrl(type: "analyses" | "events", sector?: number | null): string {
+  const params = new URLSearchParams()
+  if (sector != null) params.set("sector", String(sector))
+  return `${API_BASE}/export/${type}${params.toString() ? "?" + params : ""}`
+}

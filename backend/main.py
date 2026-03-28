@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from config import settings
 from db.database import engine
 from db.models import Base
-from routers import analyze, targets, events, scan, settings as settings_router
+from routers import analyze, targets, events, scan, settings as settings_router, export
 from brand import APP_DESCRIPTION, APP_NAME, APP_TAGLINE
 
 logging.basicConfig(
@@ -69,6 +69,7 @@ app.include_router(targets.router)
 app.include_router(events.router)
 app.include_router(scan.router)
 app.include_router(settings_router.router)
+app.include_router(export.router)
 
 
 def _migrate_add_missing_columns():

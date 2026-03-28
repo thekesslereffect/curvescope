@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { SearchBar } from "@/components/SearchBar"
 import { ResultsTable, EVENT_TYPES } from "@/components/ResultsTable"
-import { getAnalyses, deleteAllAnalyses, type AnalysesResponse } from "@/lib/api"
+import { getAnalyses, deleteAllAnalyses, getExportUrl, type AnalysesResponse } from "@/lib/api"
 import { extractApiErrorMessage } from "@/lib/api-errors"
 import { APP_NAME, APP_ONE_LINER } from "@/lib/brand"
 
@@ -150,6 +150,12 @@ export default function DashboardPage() {
           <button type="button" onClick={() => load()} className="btn-secondary text-xs">
             Refresh
           </button>
+          <a href={getExportUrl("analyses")} download className="btn-secondary text-xs">
+            ↓ Export CSV
+          </a>
+          <a href={getExportUrl("events")} download className="btn-secondary text-xs">
+            ↓ Events CSV
+          </a>
           <button
             type="button"
             onClick={async () => {
