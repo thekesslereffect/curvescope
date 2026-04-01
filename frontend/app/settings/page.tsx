@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import {
   getAppSettings,
   updateDataDir,
+  clearMastCache,
   startTraining,
   getTrainStatus,
   getTrainDefaults,
@@ -59,6 +60,7 @@ export default function SettingsPage() {
   const [settingsLoad, setSettingsLoad] = useState<"loading" | "ok" | "error">("loading")
   const [settingsLoadError, setSettingsLoadError] = useState<string | null>(null)
   const [trainStarting, setTrainStarting] = useState(false)
+  const [clearingCache, setClearingCache] = useState(false)
 
   const load = useCallback(async () => {
     setSettingsLoad("loading")
@@ -270,11 +272,44 @@ export default function SettingsPage() {
           </button>
         </div>
         {s && (
-          <ul className="mt-4 text-xs font-mono text-muted-foreground space-y-1">
-            <li>MAST cache: {s.mast_cache_dir}</li>
-            <li>Weights: {s.model_weights_dir}</li>
-            <li>Database file size: {fmtBytes(s.database_size_bytes)}</li>
-          </ul>
+          <div className="mt-4 space-y-3">
+            <ul className="text-xs font-mono text-muted-foreground space-y-1">
+              <li>MAST cache: {s.mast_cache_dir}</li>
+              <li>Weights: {s.model_weights_dir}</li>
+              <li>Database file size: {fmtBytes(s.database_size_bytes)}</li>
+            </ul>
+            <div>
+              <button
+                type="button"
+                disabled={clearingCache}
+                onClick={async () => {
+                  if (!confirm(
+                    "Delete all downloaded FITS files from the MAST cache?\n\n" +
+                    "This frees disk space but means light curves will need to be re-downloaded " +
+                    "if you re-analyze a target. Your database, model weights, and all results are kept."
+                  )) return
+                  setClearingCache(true)
+                  setErr(null)
+                  setMsg(null)
+                  try {
+                    const r = await clearMastCache()
+                    setMsg(`MAST cache cleared — freed ${fmtBytes(r.freed_bytes)}`)
+                  } catch (e) {
+                    setErr(extractApiErrorMessage(e))
+                  } finally {
+                    setClearingCache(false)
+                  }
+                }}
+                className="btn-secondary text-xs disabled:opacity-40"
+              >
+                {clearingCache ? "Clearing…" : "Clear MAST cache"}
+              </button>
+              <Hint>
+                Deletes downloaded FITS files to free disk space. Your database, results, and model weights are not
+                affected. Light curves will be re-downloaded from MAST if you analyze a target again.
+              </Hint>
+            </div>
+          </div>
         )}
       </section>
 

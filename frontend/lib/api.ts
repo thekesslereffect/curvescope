@@ -199,6 +199,11 @@ export async function updateDataDir(path: string) {
   return data as { ok: boolean; data_dir: string; message: string }
 }
 
+export async function clearMastCache() {
+  const { data } = await client.delete("/settings/mast-cache", { timeout: 300_000 })
+  return data as { ok: boolean; freed_bytes: number; errors?: number }
+}
+
 export interface TrainDefaults {
   epochs: number
   batch_size: number

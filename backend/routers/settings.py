@@ -153,6 +153,37 @@ def get_settings_view():
 # Data-dir management
 # ---------------------------------------------------------------------------
 
+@router.delete("/settings/mast-cache")
+def clear_mast_cache():
+    """Delete downloaded FITS files from the MAST cache. Never touches the database."""
+    import shutil
+
+    cache_dir = settings.mast_cache_dir
+    if not cache_dir.exists():
+        return {"ok": True, "freed_bytes": 0, "message": "Cache directory does not exist"}
+
+    db_stem = "tess_anomaly"
+    freed = 0
+    errors = 0
+    for item in list(cache_dir.iterdir()):
+        if item.name.startswith(db_stem):
+            continue
+        try:
+            if item.is_dir():
+                size = sum(f.stat().st_size for f in item.rglob("*") if f.is_file())
+                shutil.rmtree(item)
+                freed += size
+            else:
+                freed += item.stat().st_size
+                item.unlink()
+        except Exception as exc:
+            logger.warning("Could not remove %s: %s", item, exc)
+            errors += 1
+
+    logger.info("Cleared MAST cache: freed %d bytes (%d errors)", freed, errors)
+    return {"ok": True, "freed_bytes": freed, "errors": errors}
+
+
 class DataDirBody(BaseModel):
     path: str = Field(..., min_length=1)
 
